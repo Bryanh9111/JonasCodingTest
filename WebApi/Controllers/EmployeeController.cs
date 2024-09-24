@@ -2,11 +2,11 @@
 using BusinessLayer.Model.Interfaces;
 using BusinessLayer.Model.Models;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Script.Serialization;
 using WebApi.Models;
 
 namespace WebApi.Controllers
@@ -69,7 +69,8 @@ namespace WebApi.Controllers
         {
             try
             {
-                var employeeDto = JsonConvert.DeserializeObject<EmployeeDto>(value);
+                var serializer = new JavaScriptSerializer();
+                var employeeDto = serializer.Deserialize<EmployeeDto>(value);//JsonConvert.DeserializeObject<EmployeeDto>(value);
                 var employeeInfo = _mapper.Map<EmployeeInfo>(employeeDto);
                 var employeeCreated = await _employeeService.CreateEmployeeAsync(employeeInfo);
                 return _mapper.Map<EmployeeDto>(employeeCreated);
@@ -88,7 +89,8 @@ namespace WebApi.Controllers
         {
             try
             {
-                var employeeDto = JsonConvert.DeserializeObject<EmployeeDto>(value);
+                var serializer = new JavaScriptSerializer();
+                var employeeDto = serializer.Deserialize<EmployeeDto>(value);//JsonConvert.DeserializeObject<EmployeeDto>(value);
                 var employeeInfo = _mapper.Map<EmployeeInfo>(employeeDto);
                 var employeeUpdated = await _employeeService.UpdateEmployeeAsync(code, employeeInfo);
                 return _mapper.Map<EmployeeDto>(employeeUpdated);

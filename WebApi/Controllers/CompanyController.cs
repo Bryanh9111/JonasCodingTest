@@ -2,11 +2,11 @@
 using BusinessLayer.Model.Interfaces;
 using BusinessLayer.Model.Models;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Script.Serialization;
 using WebApi.Models;
 
 namespace WebApi.Controllers
@@ -69,7 +69,8 @@ namespace WebApi.Controllers
         {
             try
             {
-                var companyDto = JsonConvert.DeserializeObject<CompanyDto>(value);
+                var serializer = new JavaScriptSerializer();
+                var companyDto = serializer.Deserialize<CompanyDto>(value); //JsonConvert.DeserializeObject<CompanyDto>(value);
                 var companyInfo = _mapper.Map<CompanyInfo>(companyDto);
                 var companyCreated = await _companyService.CreateCompanyAsync(companyInfo);
                 return _mapper.Map<CompanyDto>(companyCreated);
@@ -88,7 +89,8 @@ namespace WebApi.Controllers
         {
             try
             {
-                var companyDto = JsonConvert.DeserializeObject<CompanyDto>(value);
+                var serializer = new JavaScriptSerializer();
+                var companyDto = serializer.Deserialize<CompanyDto>(value);//JsonConvert.DeserializeObject<CompanyDto>(value);
                 var companyInfo = _mapper.Map<CompanyInfo>(companyDto);
                 var companyUpdated = await _companyService.UpdateCompanyAsync(id.ToString(), companyInfo);
                 return _mapper.Map<CompanyDto>(companyUpdated);
